@@ -13,7 +13,7 @@
                (:file "package")
                (:file "trivial-graph-canonization" :depends-on ("package"))
                )
-  :depends-on (:alexandria :graph))
+  :depends-on (:alexandria :graph :iterate))
 
 (defmethod perform ((op test-op)
                     (system (eql (find-system :trivial-graph-canonization))))

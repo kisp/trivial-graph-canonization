@@ -2,4 +2,4 @@
 
 (defpackage :trivial-graph-canonization-test
   (:use :common-lisp :myam :alexandria
-   :trivial-graph-canonization))
+   :trivial-graph-canonization :graph :iterate))

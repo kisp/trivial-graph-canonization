@@ -31,4 +31,5 @@ install:
 
 script:
   - cl -e '(ql:quickload "trivial-graph-canonization-test")
-           (uiop:quit (if (myam:load-and-run! "trivial-graph-canonization-test") 0 1))'
+           (let ((myam:*num-trials* 5000))
+             (uiop:quit (if (myam:load-and-run! "trivial-graph-canonization-test") 0 1)))'

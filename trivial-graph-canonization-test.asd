@@ -7,8 +7,9 @@
   :description "Tests for trivial-graph-canonization"
   :components ((:module "test"
                 :components ((:file "package")
+                             (:file "data" :depends-on ("package"))
                              (:file "test" :depends-on ("package")))))
-  :depends-on (:trivial-graph-canonization :myam :alexandria))
+  :depends-on (:trivial-graph-canonization :myam :alexandria :iterate))
 
 (defmethod perform ((op test-op)
                     (system (eql (find-system :trivial-graph-canonization-test))))
