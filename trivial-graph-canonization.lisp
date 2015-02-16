@@ -25,9 +25,11 @@
 (defun graph-canonization (graph)
   (let* ((nodes (graph:nodes graph))
          (order (length nodes)))
-    (let (list)
-      (map-permutations
-       (lambda (nodes)
-         (push (build-vector graph order nodes) list))
-       nodes :copy nil)
-      (first (sort list #'vector-lex-<)))))
+    (if (zerop order)
+        (make-array 0 :element-type 'bit)
+        (let (list)
+          (map-permutations
+           (lambda (nodes)
+             (push (build-vector graph order nodes) list))
+           nodes :copy nil)
+          (first (sort list #'vector-lex-<))))))

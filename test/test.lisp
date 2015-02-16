@@ -93,3 +93,13 @@
           (fail "nodes ~S edges ~S gives ~S, which is already known"
                 (nodes graph) (edges graph) canonization))
         (setf (gethash canonization seen) t)))))
+
+(deftest small.1
+  (is (equal #* (graph-canonization (populate (make-instance 'graph) :nodes '()))))
+  (is (equal #*0 (graph-canonization (populate (make-instance 'graph) :nodes '(a)))))
+  (is (equal #*1 (graph-canonization (populate (make-instance 'graph) :nodes '(a) :edges '((a a)))))))
+
+(deftest small.2
+  (is (equal #* (graph-canonization (populate (make-instance 'digraph) :nodes '()))))
+  (is (equal #*0 (graph-canonization (populate (make-instance 'digraph) :nodes '(a)))))
+  (is (equal #*1 (graph-canonization (populate (make-instance 'digraph) :nodes '(a) :edges '((a a)))))))
