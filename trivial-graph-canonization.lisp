@@ -10,8 +10,16 @@
       (iter
         (for b in nodes)
         (for j upfrom 0)
-        (setf (aref matrix i j)
-              (if (graph:has-edge-p graph (list a b)) 1 0))))
+        (locally
+            ;; Prevent CCL bug observed on
+            ;; CCL "Version 1.10-r16196  (LinuxX8664)"
+            ;; Fault during read of memory address #xB
+            ;;    [Condition of type CCL::INVALID-MEMORY-ACCESS]
+            ;; by declaring the setf (aref matrix i j)
+            ;; with (optimize debug).
+            #+(and ccl X86-64) (declare (optimize debug))
+            (setf (aref matrix i j)
+                  (if (graph:has-edge-p graph (list a b)) 1 0)))))
     matrix))
 
 (defun build-vector (matrix order nodes)
