@@ -1,0 +1,35 @@
+image: registry.gitlab.com/docker-p75439/sbcl-dparnell-quicklisp:latest
+
+before_script:
+  - ln -s "$(pwd)" /opt/quicklisp/local-projects/"$(basename $(pwd))"
+
+test:
+  before_script:
+#    - apt update
+#    - apt install firefox-esr -y
+#    - wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz
+#    - mkdir geckodriver
+#    - tar -xzf geckodriver-v0.20.1-linux64.tar.gz -C geckodriver
+#    - export PATH=$PATH:$PWD/geckodriver
+  script:
+     - sbcl --disable-ldb --lose-on-corruption --end-runtime-options --non-interactive
+       --eval '(ql:quickload "trivial-graph-canonization-test")'
+       --eval '(uiop:quit (if (myam:load-and-run! "trivial-graph-canonization-test") 0 1))'
+       --end-toplevel-options
+
+coverage:
+  script:
+    - mkdir -p coverage-report
+    - sbcl --disable-ldb --lose-on-corruption --end-runtime-options --non-interactive
+      --eval '(ql:quickload "trivial-graph-canonization-test")'
+      --eval "(require 'sb-cover)"
+      --eval '(declaim (optimize sb-cover:store-coverage-data))'
+      --eval '(asdf:load-system "trivial-graph-canonization" :force t)'
+      --eval '(unless (myam:load-and-run! "trivial-graph-canonization-test") (uiop:quit 1))'
+      --eval '(sb-cover:report "coverage-report/")'
+      --end-toplevel-options
+    - tar -czvf coverage.tgz coverage-report
+  artifacts:
+    paths:
+    - coverage.tgz
+    expire_in: 8 weeks
